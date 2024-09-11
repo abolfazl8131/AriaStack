@@ -1,0 +1,6 @@
+{   "project_name":"deb_log",
+    "mysql_root_password":"123",
+    "mysql_database":"db",
+    "mysql_username":"admin",
+    "mysql_password":"123"
+}

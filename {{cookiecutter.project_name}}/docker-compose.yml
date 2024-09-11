@@ -1,0 +1,108 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: {{cookiecutter.mysql_root_password}}
+      MYSQL_DATABASE: {{cookiecutter.mysql_database}}
+      MYSQL_USER: {{cookiecutter.mysql_username}}
+      MYSQL_PASSWORD: {{cookiecutter.mysql_password}}
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysqlData:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+    networks:
+      - kafka-net
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - kafka-net
+
+  kafka:
+      image: wurstmeister/kafka
+      container_name: kafka
+      ports:
+        - "9092:9092"
+      environment:
+        KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,OUTSIDE://localhost:9093
+        KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,OUTSIDE:PLAINTEXT
+        KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,OUTSIDE://0.0.0.0:9093
+        KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+        KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+        KAFKA_CREATE_TOPICS: "baeldung:1:1"
+        
+       
+      networks:
+        - kafka-net
+      depends_on:
+        - zookeeper
+
+
+  kafka-connect:
+      image: debezium/connect:1.6
+      container_name: kafka-connect
+      ports:
+        - "8083:8083"
+      environment:
+        BOOTSTRAP_SERVERS: kafka:9092
+        GROUP_ID: connect-cluster
+        CONFIG_STORAGE_TOPIC: my_connect_configs
+        OFFSET_STORAGE_TOPIC: my_connect_offsets
+        STATUS_STORAGE_TOPIC: my_connect_statuses
+        KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
+        VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+        CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+        CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+       
+
+      depends_on:
+        - kafka
+        - zookeeper
+      volumes:
+        - ./debezium-connector-mysql/debezium-connector-mysql-2.5.3.Final.jar:/kafka/connect/debezium-connector-mysql.jar
+
+      networks:
+        - kafka-net
+
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    container_name: kafdrop
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: kafka:9092
+    depends_on:
+      - kafka
+    networks:
+      - kafka-net
+
+  schema-registry:
+      image: confluentinc/cp-schema-registry:5.5.3
+      environment:
+        - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:2181
+        - SCHEMA_REGISTRY_HOST_NAME=schema-registry
+        - SCHEMA_REGISTRY_LISTENERS=http://schema-registry:8081,http://localhost:8081
+      ports:
+        - 8081:8081
+      depends_on: 
+        - zookeeper 
+        - kafka
+      networks:
+        - kafka-net
+
+networks:
+  kafka-net:
+    driver: bridge

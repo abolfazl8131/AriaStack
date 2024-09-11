@@ -1,0 +1,4 @@
+confluent-kafka
+requests
+pytest
+mysql-connector-python
