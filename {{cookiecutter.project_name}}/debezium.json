@@ -10,7 +10,8 @@
         "database.password": "{{cookiecutter.mysql_password}}",
         "database.server.id": "184054",
         "database.server.name": "demo",  
-        "topic.prefix": "dbserver1",  
+        "topic.prefix": "dbserver1", 
+        "database.include.list": "db", 
         "database.history.kafka.bootstrap.servers": "kafka:9092",
         "database.history.kafka.topic": "schema-changes.test" 
         }
