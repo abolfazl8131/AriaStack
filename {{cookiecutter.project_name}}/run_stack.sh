@@ -1,0 +1,1 @@
+cd ELK && sudo docker compose up -d && cd .. && sudo docker compose up -d 
