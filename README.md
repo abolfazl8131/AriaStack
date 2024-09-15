@@ -1,1 +1,1 @@
-# AriaStack : the best friend of Data-Driven companies
+# AriaStack: Logging, Monitoring, Analytics, replication, and the best friend of IT guys.
