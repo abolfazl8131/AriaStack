@@ -50,8 +50,11 @@ services:
         - zookeeper
 
 
-  kafka-connect:
-      image: debezium/connect:1.6
+  kkafka-connect:
+      build:
+        context: ./debezium-context
+        args:
+          - DEBEZIUM_VERSION=1.6
       container_name: kafka-connect
       ports:
         - "8083:8083"
@@ -61,20 +64,21 @@ services:
         CONFIG_STORAGE_TOPIC: my_connect_configs
         OFFSET_STORAGE_TOPIC: my_connect_offsets
         STATUS_STORAGE_TOPIC: my_connect_statuses
-        KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
-        VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
-        CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-        CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-       
-
+        KAFKA_CONNECT_ES_DIR: kafka-connect-elasticsearch
+     
+     
+      restart: on-failure
       depends_on:
         - kafka
         - zookeeper
       volumes:
         - ./debezium-connector-mysql/debezium-connector-mysql-2.5.3.Final.jar:/kafka/connect/debezium-connector-mysql.jar
+        - ./connect-standalone:/config/connect-standalone.properties 
 
       networks:
+        - elk_elk
         - kafka-net
+
 
 
   kafdrop:
@@ -106,3 +110,6 @@ services:
 networks:
   kafka-net:
     driver: bridge
+
+  elk_elk:
+    external: true

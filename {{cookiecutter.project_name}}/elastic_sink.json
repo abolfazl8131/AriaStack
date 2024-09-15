@@ -1,0 +1,25 @@
+{
+    "name": "elastic-sink",
+        "config": {
+            "connector.class":"io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+            "tasks.max": "1",
+            "topics": "demo.db.Persons",
+            "connection.url": "http://elasticsearch:9200/",
+            "connection.username":"elastic",
+            "connection.password":"{{cookiecutter.elastic_password}}",
+            "type.name": "_doc",
+            "key.converter.schema.registry.url": "http://schema-registry:8081",
+            "value.converter.schema.registry.url": "http://schema-registry:8081",
+            "value.converter.schemas.enable": "false",
+            "schema.ignore": "true",
+            "key.ignore": "false",
+            "behavior.on.null.values": "delete",    
+            "transforms": "unwrap,key",
+            "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+            "transforms.key.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
+            "transforms.key.field": "id",
+            "transforms.unwrap.drop.tombstones": "false",
+            "transforms.unwrap.drop.deletes": "false"
+        
+    }
+}
