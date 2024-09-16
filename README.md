@@ -10,7 +10,8 @@ actually, this is a CDC platform developed with ELK stack, Debezium, Kafka, and 
 the main concept is about CDC or Capture Data Change. when you need to track your database based on 3 main actions (Create, Update, and Delete) but this Stack is the platform to do that.
 We have configured the main services you need and services for the maintenance.
 > [!IMPORTANT]  
-> MySQL service is demo. you need to connect your real database with your config based on the Debezium document as you see in the debezium.json file
+> MySQL service is demo. you need to connect your real database with your config based on the Debezium document as you see in the debezium.json file.
+> 
 > all of the services are single nodes! if you need you can add more services (for example 2 instances of Kafka with the same image).
 
 > [!WARNING]  
