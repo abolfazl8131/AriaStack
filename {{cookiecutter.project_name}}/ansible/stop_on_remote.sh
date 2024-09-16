@@ -1,0 +1,1 @@
+ansible-playbook -i inventory stop_stack.yml

@@ -1,0 +1,1 @@
+ansible-playbook -i inventory install_stack.yml
