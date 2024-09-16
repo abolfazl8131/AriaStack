@@ -1,0 +1,20 @@
+name: Docker CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: create a cookie-cutter project
+    - name: install requirements
+    - name: run stack
+    - name: stop stack
+      
