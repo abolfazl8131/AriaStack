@@ -18,7 +18,12 @@ We have configured the main services you need and services for the maintenance.
 > DO NOT Change any docker image we used in docker-compose files because you will lose your compatibility.
 
 > [!NOTE]  
-> Each database has its configuration and depends on your scenario. For my demo scenario, I used MySQL and Elasticsearch for sink connection. (capture MySQL changes in elastic search) you may use different databases in the cloud or on-premise. 
+> Each database has its configuration and depends on your scenario. For my demo scenario, I used MySQL and Elasticsearch for sink connection. (capture MySQL changes in elastic search) you may use different databases in the cloud or on-premise.
+
+> [!TIP]
+> You may need to configure your ELK, please use this GitHub link: **https://github.com/kayvansol/elasticsearch**.
+> project is based on cookie-cutter so you enter your credentials.
+> We have affected the highest level of automation. so you need to connect the remote machine and just use Ansible for installation. 
 
 
 
