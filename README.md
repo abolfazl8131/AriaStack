@@ -1,4 +1,4 @@
-# AriaStack: Logging, Monitoring, Analytics, Replication, and the best friend of DevOps guys.
+# AriaStack: Logging, Monitoring, Analytics, Replication, and one of the best friends of DevOps guys.
 
 ## About the project
 This is a concrete stack on docker-compose for the database Monitoring purpose.
