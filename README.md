@@ -12,7 +12,7 @@ We have configured the main services you need and services for the maintenance.
 > [!IMPORTANT]  
 > MySQL service is demo. you need to connect your real database with your config based on the Debezium document as you see in the debezium.json file.
 > 
-> all of the services are single nodes! if you need you can add more services (for example 2 instances of Kafka with the same image).
+> All of the services are single nodes! if you need you can add more nodes (for example 2 instances of Kafka with the same image).
 
 > [!WARNING]  
 > DO NOT Change any docker image we used in docker-compose files because you will lose your compatibility.
