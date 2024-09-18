@@ -28,10 +28,4 @@ We have configured the main services you need and services for the maintenance.
 
 
 
-## How to use it?
-First of all, you need to install the project with cookiecutter (for example the name of the project is AriaStack) and then type in the terminal `cd AriaStack`.<br />
-if you wanna use it locally, simply run `sh run_stack.sh`, or if you wanna stop it `sh down_stack.sh`.<br />
-if you wanna install it on the remote machine `sh ansible/install_on_remote.sh`.<br />
 
-> [!NOTE]  
-> You can run `sh setup.sh` with your database config (.json files) to configure debezium connection.
