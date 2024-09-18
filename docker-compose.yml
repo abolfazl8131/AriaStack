@@ -5,10 +5,10 @@ services:
     image: mysql:8.0
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: {{cookiecutter.mysql_root_password}}
-      MYSQL_DATABASE: {{cookiecutter.mysql_database}}
-      MYSQL_USER: {{cookiecutter.mysql_username}}
-      MYSQL_PASSWORD: {{cookiecutter.mysql_password}}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     container_name: mysql
     ports:
       - "3306:3306"

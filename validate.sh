@@ -1,1 +1,0 @@
-curl -i -X GET -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connector-plugins/MySqlConnector/config/validate -d "@debezium.json"
