@@ -5,7 +5,8 @@ This is a concrete stack on docker-compose for the database Monitoring purpose.
 actually, this is a CDC platform developed with ELK stack, Debezium, Kafka, and a sample MySQL instance and the main usage is capturing data changes in a database on another database same as elastic search for real-time analytics and so on.
 
 ## System design
-![aria drawio](https://github.com/user-attachments/assets/2fcad17f-071c-47ca-bb4b-15e7e72eff1b)
+![aria drawio(1)](https://github.com/user-attachments/assets/4b67e81a-68d2-402d-b39d-0be0e195f9e4)
+
 
 
 the main concept is about CDC or Capture Data Change. when you need to track your database based on 3 main actions (Create, Update, and Delete) but this Stack is the platform to do that.
