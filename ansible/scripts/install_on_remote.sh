@@ -1,0 +1,1 @@
+ansible-playbook -i hosts/inventory playbooks/install_stack.yml
