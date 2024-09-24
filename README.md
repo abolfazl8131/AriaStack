@@ -1,5 +1,9 @@
 # AriaStack: Logging, Monitoring, Analytics, Replication, and one of the best friends of DevOps guys.
 
+## Update!!
+for the `testing` stage we have used docker-compose for production but it is not a valid solution for some security issues. in later versions, we use `docker swarm` as a valid deployment solution.
+
+
 ## About the project
 This is a concrete stack on docker-compose for the database Monitoring purpose.
 actually, this is a CDC platform developed with ELK stack, Debezium, Kafka, and a sample MySQL instance and the main usage is capturing data changes in a database on another database same as elastic search for real-time analytics and so on.
@@ -25,9 +29,12 @@ We have configured the main services you need and services for the maintenance.
 > [!TIP]
 > You may need to configure your ELK, please use this GitHub link: **https://github.com/kayvansol/elasticsearch**.
 > project is based on cookie-cutter so you enter your credentials.
-> We have affected the highest level of automation. so you need to connect the remote machine and just use Ansible for installation. 
+> We have affected the highest level of automation. so you need to connect the remote machine and just use Ansible for installation.
 
 
+## Usage 
+install it using Ansible => sh ./AriaStack_Ansible/scripts/install_on_remote.sh
+run locally => sh ./AriaStack_Ansible/AriaStack/run_stack.sh  
 
 
 
