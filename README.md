@@ -33,8 +33,8 @@ We have configured the main services you need and services for the maintenance.
 
 
 ## Usage 
-install it using Ansible : sh ./AriaStack_Ansible/scripts/install_on_remote.sh.<br/>
-run locally : sh ./AriaStack_Ansible/AriaStack/run_stack.sh.
+install it using Ansible : `sh ./AriaStack_Ansible/scripts/install_on_remote.sh`<br/>
+run locally : `sh ./AriaStack_Ansible/AriaStack/run_stack.sh`
 
 
 
