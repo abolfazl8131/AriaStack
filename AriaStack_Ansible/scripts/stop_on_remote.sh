@@ -1,0 +1,1 @@
+ansible-playbook -i AriaStack_Ansible/hosts/inventory AriaStack_Ansible/playbooks/stop_stack.yml

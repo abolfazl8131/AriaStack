@@ -1,0 +1,17 @@
+---
+- hosts: all
+  tasks:
+    - name: create dir
+      shell: mkdir -p ~/AriaStack_Ansible
+
+    - name: copy artifacts
+      synchronize:
+        src: ../AriaStack
+        dest: ~/AriaStack_Ansible
+        rsync_opts:
+          - "--exclude=mysqlData"
+   
+
+    - name: run stack
+      
+      shell: cd ~/AriaStack_Ansible/AriaStack && sh run_stack.sh

@@ -1,6 +1,0 @@
----
-- hosts: all
-  tasks:
-
-    - name: stop stack 
-      shell: cd stack && sh down_stack.sh
