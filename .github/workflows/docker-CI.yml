@@ -18,6 +18,6 @@ jobs:
       run: python -m venv venv
     - name: install dependecies
       run: source venv/bin/activate && pip install -r requirements.txt
-    - name: build docker compose
-      run: docker compose build
+    - name: run in dev mode
+      run: sh ./AriaStack_Ansible/AriaStack/run_stack.sh
     
