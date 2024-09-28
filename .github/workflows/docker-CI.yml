@@ -26,6 +26,7 @@ jobs:
       run: sh run_stack.sh
       
     - name: stop containers in dev mode
+      working-directory: AriaStack_Ansible/AriaStack
       run: sh down_stack.sh
       
 
