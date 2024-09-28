@@ -34,10 +34,6 @@ jobs:
       working-directory: ./AriaStack_Ansible/AriaStack
       run: sh down_stack.sh
       
-  deploy:
-    runs-on: ubuntu-latest
-    env:
-      ENV: Production
 
 
 
