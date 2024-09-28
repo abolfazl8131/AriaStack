@@ -21,13 +21,8 @@ jobs:
     - name: install dependecies
       run: source venv/bin/activate && pip install -r requirements.txt
       
-  test: 
-    runs-on: ubuntu-latest
-    env:
-      ENV: Dev
-    steps:
     - name: run containers in dev mode
-      
+      working-directory: AriaStack_Ansible/AriaStack
       run: sh run_stack.sh
       
     - name: stop containers in dev mode
