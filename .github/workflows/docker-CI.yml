@@ -19,5 +19,6 @@ jobs:
     - name: install dependecies
       run: source venv/bin/activate && pip install -r requirements.txt
     - name: run in dev mode
-      run: sh ./AriaStack_Ansible/AriaStack/run_stack.sh
+      working-directory: ./AriaStack_Ansible/AriaStack
+      run: sh run_stack.sh
     
