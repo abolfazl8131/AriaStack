@@ -11,7 +11,9 @@
         rsync_opts:
           - "--exclude=mysqlData"
    
+    - name: set ENV
+      shell: export ENV=swarm
 
     - name: run stack
       
-      shell: cd ~/AriaStack_Ansible/AriaStack && sh run_stack.sh
+      shell: cd ~/AriaStack_Ansible/AriaStack && ./run_stack.sh
