@@ -1,0 +1,158 @@
+version: '3.8'
+
+services:
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    
+
+  kafka:
+      image: wurstmeister/kafka
+      container_name: kafka
+      ports:
+        - "9092:9092"
+      environment:
+        KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,OUTSIDE://localhost:9093
+        KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,OUTSIDE:PLAINTEXT
+        KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,OUTSIDE://0.0.0.0:9093
+        KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+        KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+        KAFKA_CREATE_TOPICS: "baeldung:1:1"
+        
+     
+      depends_on:
+        - zookeeper
+      logging:
+        driver: gelf
+        options:
+          gelf-address: "udp://localhost:12201"
+          tag: "kafka-logging"
+
+
+  kafka-connect:
+      image: 81318131/kafka-connect
+      container_name: kafka-connect
+      ports:
+        - "8083:8083"
+      environment:
+        BOOTSTRAP_SERVERS: kafka:9092
+        GROUP_ID: connect-cluster
+        CONFIG_STORAGE_TOPIC: my_connect_configs
+        OFFSET_STORAGE_TOPIC: my_connect_offsets
+        STATUS_STORAGE_TOPIC: my_connect_statuses
+        KAFKA_CONNECT_ES_DIR: kafka-connect-elasticsearch
+
+      depends_on:
+        - kafka
+        - zookeeper
+      volumes:
+        - ./debezium-connector-mysql/debezium-connector-mysql-2.5.3.Final.jar:/kafka/connect/debezium-connector-mysql.jar
+        - ./debezium-context/connect-standalone:/config/connect-standalone.properties 
+
+      logging:
+        driver: gelf
+        options:
+          gelf-address: "udp://localhost:12201"
+          tag: "kafka-connect-logging"
+
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    container_name: kafdrop
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: kafka:9092
+    depends_on:
+      - kafka
+    
+
+  schema-registry:
+      image: confluentinc/cp-schema-registry:5.5.3
+      environment:
+        - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:2181
+        - SCHEMA_REGISTRY_HOST_NAME=schema-registry
+        - SCHEMA_REGISTRY_LISTENERS=http://schema-registry:8081,http://localhost:8081
+      ports:
+        - 8081:8081
+      depends_on: 
+        - zookeeper 
+        - kafka
+     
+#ELK setup
+  setup:
+  
+    image: 81318131/elasticsearch
+
+    volumes:
+      - ./ELK/setup/entrypoint.sh:/entrypoint.sh:ro,Z
+      - ./ELK/setup/lib.sh:/lib.sh:ro,Z
+      - ./ELK/setup/roles:/roles:ro,Z
+    environment:
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+      
+    
+    depends_on:
+      - elasticsearch
+    
+  
+
+  elasticsearch:
+    image: 81318131/elasticsearch
+    volumes:
+      - ./ELK/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
+      - ./ELK/elasticsearch:/usr/share/elasticsearch/data:Z
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      node.name: elasticsearch
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      discovery.type: single-node
+    
+   
+    
+
+  logstash:
+    image: 81318131/logstash
+    container_name: logstash
+    volumes:
+      - ./ELK/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
+      - ./ELK/logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
+    ports:
+      - 5044:5044
+      - 50000:50000/tcp
+      - 50000:50000/udp
+      - 9600:9600
+      - 12201:12201/udp
+      
+    environment:
+      LS_JAVA_OPTS: -Xms256m -Xmx256m
+      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
+   
+    depends_on:
+      - elasticsearch
+   
+
+  kibana:
+    image: 81318131/kibana
+    volumes:
+     - ./ELK/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+    ports:
+      - 5601:5601
+    environment:
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+  
+    depends_on:
+      - elasticsearch
+   
+   
+
+volumes:
+  elasticsearch:

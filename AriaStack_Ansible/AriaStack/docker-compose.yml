@@ -1,22 +1,7 @@
 version: '3.8'
 
 services:
-  mysql:
-    image: mysql:8.0
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    container_name: mysql
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./mysqlData:/var/lib/mysql
-      - ./my.cnf:/etc/mysql/conf.d/my.cnf
-    networks:
-      - kafka-net
+  
 
   zookeeper:
     image: wurstmeister/zookeeper
@@ -46,6 +31,7 @@ services:
        
       networks:
         - kafka-net
+        - elk_elk
       depends_on:
         - zookeeper
       logging:
@@ -55,11 +41,12 @@ services:
           tag: "kafka-logging"
 
 
-  kkafka-connect:
+  kafka-connect:
       build:
         context: ./debezium-context
         args:
           - DEBEZIUM_VERSION=1.6
+      image: 81318131/kafka-connect
       container_name: kafka-connect
       ports:
         - "8083:8083"
@@ -78,7 +65,7 @@ services:
         - zookeeper
       volumes:
         - ./debezium-connector-mysql/debezium-connector-mysql-2.5.3.Final.jar:/kafka/connect/debezium-connector-mysql.jar
-        - ./connect-standalone:/config/connect-standalone.properties 
+        - ./debezium-context/connect-standalone:/config/connect-standalone.properties 
 
       networks:
         - elk_elk
